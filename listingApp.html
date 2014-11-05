@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Angular Listing App</title>
+    <link href="css/bootstrap.css" rel="stylesheet" media="screen" />
+    <link href="css/bootstrap-theme.css" rel="stylesheet" media="screen" />
+    <link href="css/styles.css" rel="stylesheet" media="screen" />
+
+</head>
+<body data-ng-app="listingApp">
+	<header></header>
+	<main>
+		<div class="container">
+    <section data-ng-controller="listingCtrl">
+        <div class="page-header">
+            <h1>{{title}} <small>defined in the controller $scope</small></h1>
+        </div>
+        <div class="controls">
+            <input type="text" data-ng-model="filters.query" placeholder="search news" />
+            <label for="sortBy">Sort by</label>
+            <select id="sortBy" data-ng-model="descending">
+                <option value="true">Newest first</option>
+                <option value="false">Oldest first</option>
+            </select>
+            <div class="clear">
+                <div data-ng-repeat="tag in filters.tags" class="checkbox">
+                    <label for="{{tag.label}}">{{tag.label}}</label>
+                    <input id="{{tag.label}}" type="checkbox" data-ng-model="tag.selected" />
+                </div>
+            </div>
+        </div>
+        <p class="clear">{{filtered.length}} articles of {{articles.length}} match your search.</p>
+        <ul class="clear">
+            <li data-ng-repeat="article in filtered = (articles | newsFilter: filters) | orderBy:'pubDate':descending | limitTo: viewLimit">
+                <h2>{{article.title}}</h2>
+                <p>{{article.pubDate | date:'dd/MM/yy'}}</p>
+                <p>{{article.description}}</p>
+            </li>
+        </ul>
+        <button class="btn" data-ng-click="viewMore(8)" data-ng-hide="viewLimit >= filtered.length">view more</button>
+    </section>
+    <section data-ng-controller="testCtrl">
+        <h2>{{dataFromRoot}}</h2>
+    </section>
+</main>
+<footer>
+	<div class="container">
+	</div>
+	</footer>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
+    <script src="scripts/services/listingServices.js"></script>
+    <script src="scripts/filters/listingFilters.js"></script>
+    <script src="scripts/modules/listing.js"></script>
+    <script src="scripts/myApp.js"></script>
+</body>
+</html>
